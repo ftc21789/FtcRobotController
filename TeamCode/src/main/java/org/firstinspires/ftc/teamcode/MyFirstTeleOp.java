@@ -77,5 +77,14 @@ public class MyFirstTeleOp extends OpMode {
             claw.setPosition(clawClosed);
         }
 
+        //Telemetry code
+        telemetry.addData("frontLeft", frontLeft.getCurrentPosition());
+        telemetry.addData("frontRight", frontRight.getCurrentPosition());
+        telemetry.addData("backLeft", backLeft.getCurrentPosition());
+        telemetry.addData("backRight", backRight.getCurrentPosition());
+        telemetry.addData("arm", arm.getCurrentPosition());
+        telemetry.addData("wrist", wrist.getCurrentPosition());
+        telemetry.update();
+
     }
 }
