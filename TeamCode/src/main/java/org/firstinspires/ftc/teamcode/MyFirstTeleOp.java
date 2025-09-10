@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.configuration.annotations.ServoTypes;
+import com.qualcomm.robotcore.hardware.configuration.typecontainers.ServoConfigurationType;
 
 @TeleOp
 public class MyFirstTeleOp extends OpMode {
@@ -88,6 +90,16 @@ public class MyFirstTeleOp extends OpMode {
         if (gamepad2.b) {
             claw.setPosition(clawClosed);
         }
+
+        //this is the code to control the arm
+        if (gamepad2.dpad_up) {
+            arm.setPower(0.5);
+        }else if (gamepad2.dpad_down) {
+            arm.setPower(-0.2);
+        }else {
+            arm.setPower(0);
+        }
+
 
         //Telemetry code,
         telemetry.addData("frontLeft", frontLeft.getCurrentPosition());
