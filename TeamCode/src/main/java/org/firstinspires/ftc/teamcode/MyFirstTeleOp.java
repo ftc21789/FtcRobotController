@@ -8,44 +8,54 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp
 public class MyFirstTeleOp extends OpMode {
+
+    //Variables for motors
     private DcMotor frontLeft, frontRight, backLeft, backRight;
     private DcMotor arm, wrist;
 
     private Servo claw;
 
+    private Servo intake;
+
+    //Variables for arm and claw positions
     private final double clawOpen = 1;
 
     private final double clawClosed = 0;
 
     @Override
     public void init() {
-        frontLeft = hardwareMap.get(DcMotor.class,"frontLeft");
-        frontRight = hardwareMap.get(DcMotor.class,"frontRight");
-        backLeft = hardwareMap.get(DcMotor.class,"backLeft");
-        backRight = hardwareMap.get(DcMotor.class,"backRight");
+        //This gets the motors from the robot controller and assigns them to our variables.
+        frontLeft = hardwareMap.get(DcMotor.class,"Frontleft");
+        frontRight = hardwareMap.get(DcMotor.class,"Frontright");
+        backLeft = hardwareMap.get(DcMotor.class,"Backleft");
+        backRight = hardwareMap.get(DcMotor.class,"Backright");
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        arm = hardwareMap.get(DcMotor.class, "armMotor");
-        wrist = hardwareMap.get(DcMotor.class, "wristMotor");
+        arm = hardwareMap.get(DcMotor.class, "tower");
+        wrist = hardwareMap.get(DcMotor.class, "hinge");
 
-        claw = hardwareMap.get(Servo.class, "claw");
+        claw = hardwareMap.get(Servo.class, "pincer");
+        intake = hardwareMap.get(Servo.class, "intake");
+
     }
 
     @Override
     public void loop() {
 
-        //Drivetrain code
+        //this takes the values from the sticks and assigns them to the variables wee will use to determine the speed each motor will run.
         double y_command = -gamepad1.left_stick_y;
         double x_command = gamepad1.left_stick_x;
         double z_command = gamepad1.right_stick_x;
 
+        //This part of the code takes the values from the sticks and adds and subtracts them together to create the correct values.
         double frontLeftCommand = y_command - x_command + z_command;
         double frontRightCommand = y_command + x_command - z_command;
         double backLeftCommand = y_command + x_command + z_command;
         double backRightCommand = y_command - x_command - z_command;
 
+        //this makes it so all values are within the motors range (-1 to 1)
         double max = Math.max(1,frontLeftCommand);
         max = Math.max(max,frontRightCommand);
         max = Math.max(max,backLeftCommand);
@@ -56,6 +66,7 @@ public class MyFirstTeleOp extends OpMode {
         backLeftCommand = backLeftCommand/max;
         backRightCommand = backRightCommand/max;
 
+        //This sets the power to the correct speed that you defined above
         frontLeft.setPower(frontLeftCommand);
         frontRight.setPower(frontRightCommand);
         backLeft.setPower(backLeftCommand);
@@ -69,6 +80,7 @@ public class MyFirstTeleOp extends OpMode {
         arm.setPower(armCommand);
         wrist.setPower(wristCommand);
 
+        //this says "if you press a the claw opens" and "if you press b the claw closes."
         if (gamepad2.a) {
             claw.setPosition(clawOpen);
         }
@@ -77,7 +89,7 @@ public class MyFirstTeleOp extends OpMode {
             claw.setPosition(clawClosed);
         }
 
-        //Telemetry code
+        //Telemetry code,
         telemetry.addData("frontLeft", frontLeft.getCurrentPosition());
         telemetry.addData("frontRight", frontRight.getCurrentPosition());
         telemetry.addData("backLeft", backLeft.getCurrentPosition());
@@ -86,7 +98,6 @@ public class MyFirstTeleOp extends OpMode {
         telemetry.addData("wrist", wrist.getCurrentPosition());
         telemetry.update();
 
-        //Nova git test
 
     }
 }
